@@ -51,12 +51,14 @@ class Player:
         if self.behavior == Behavior.IMPULSIVE:
             self.balance -= property.purchase_value
             property.status = StatusProperty.PURCHASED
+            property.owner = self.id
             self.properties.append(property)
             return property
         
         if self.behavior == Behavior.DEMANDING:
             if property.rent_value > 50:
                 self.balance -= property.purchase_value
+                property.owner = self.id
                 property.status = StatusProperty.PURCHASED
                 self.properties.append(property)
                 return property
@@ -68,6 +70,7 @@ class Player:
             if  new_balance > 80:
                 self.balance = new_balance
                 property.status = StatusProperty.PURCHASED
+                property.owner = self.id
                 self.properties.append(property)
                 return property
             
@@ -79,6 +82,7 @@ class Player:
             if bool(rvalue):
                 self.balance - property.purchase_value
                 property.status = StatusProperty.PURCHASED
+                property.owner = self.id
                 self.properties.append(property)
                 return property
             return None
@@ -94,7 +98,7 @@ class Player:
         """
         if self.__has_balance__(property.rent_value):
             ##não pago aluguel se a propriedade for minha
-            if not self.__is_own_property__(property):
+            if not self.__is_own_property__(property) and property.owner != 0:
                 self.balance -= property.rent_value
                 return True
         

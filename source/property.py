@@ -13,14 +13,15 @@ class Property:
         um status (disponível ou comprada, vide class StatusProperty), um valor de compra 
         e um valor de aluguel
     """
-    def __init__(self, id, status , purchase_value, rent_value):
+    def __init__(self, id, status , purchase_value, rent_value, owner = 0):
         self.id = id 
         self.status = status
         self.purchase_value = purchase_value
         self.rent_value = rent_value
+        self.owner = owner
 
     def __str__(self):
-        return f"id :{self.id}, status: {self.status}, valor de compra: {self.purchase_value}, valor de alugue: {self.rent_value}"
+        return f"id :{self.id}, status: {self.status}, valor de compra: {self.purchase_value}, valor de alugue: {self.rent_value}, owner: {self.owner}"
 
     def __hash__(self):
         return hash((self.id))

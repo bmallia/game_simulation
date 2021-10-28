@@ -47,7 +47,7 @@ class Match:
             for index, player in enumerate(self.players):
                 dice_number = Dice.play()
                 player.position += dice_number
-                ##print(f"O jogador {str(player)} está na posição  {player.position} no tabuleiro")
+                print(f"O jogador {str(player)} está na posição  {player.position} no tabuleiro")
                 
                 ##quando o jogador completa a volta no tabuleiro
                 if player.position >= self.board.threshold:
@@ -56,14 +56,24 @@ class Match:
                     player.balance += 100
 
                 property = self.board.path[player.position]
-                property = player.buy(property)
-                if property is not None:
-                    ##print(f"O player {str(player)} comprou a propriedade {str(property)}")
-                    self.board.path[player.position] = property
-                    player.pay_rent(property)
+                ##paga o aluguel se não for o dono e existir um dono  
+                rent_paid = player.pay_rent(property)
+                
+                ##encontra o owner para pagar ele
+                if rent_paid:
+                    self.update_balance_owner(property)
+
+                purchased_property = player.buy(property)
+                if purchased_property is not None:
+                    ##se a venda realmente ocorreu atualiza o tabuleiro para que a propriedade 
+                    ##esteja disponível novamente
+                    print(f"O player {str(player)} comprou a propriedade {str(property)}")
+                    self.board.path[player.position] = purchased_property
+
+                    
                 
                 if player.balance <= 0:                    
-                    ##atualizando o status das propriedades removidas do player
+                    ##remove o jogador da lista de player e atualiza o status das propriedades removidas do player
                     self.remove_player(player, index)
    
             self.round += 1
@@ -99,6 +109,12 @@ class Match:
                 pmax = p
         
         self.winner = pmax
-        
 
+
+    def update_balance_owner(self, prop):
+        player = next((x for x in self.players if x.id == prop.owner), None)
+        if player:
+            player.balance += prop.rent_value        
+            return True
+        return False
         

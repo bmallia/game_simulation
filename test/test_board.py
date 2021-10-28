@@ -2,6 +2,7 @@ import pytest
 from source.property import Board
 from source.property import Property, StatusProperty
 from source.errors import IllegalArgumentError
+from source.player import Player
 
 @pytest.fixture
 def property_list():
